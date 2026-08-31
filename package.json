@@ -1,0 +1,20 @@
+{
+  "name": "webex-suite-mcp-oauth-helper",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local OAuth helper for the official Webex Suite MCP server.",
+  "type": "module",
+  "scripts": {
+    "oauth:webex-suite:login": "node scripts/webex-suite-oauth.js login",
+    "oauth:webex-suite:refresh": "node scripts/webex-suite-oauth.js refresh",
+    "oauth:webex-suite:status": "node scripts/webex-suite-oauth.js status",
+    "package:share": "bash scripts/package-webex-suite-oauth-share.sh",
+    "test": "node --test tests/*.test.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7"
+  },
+  "engines": {
+    "node": ">=18.20.0"
+  }
+}

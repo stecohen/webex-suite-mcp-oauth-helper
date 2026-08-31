@@ -1,0 +1,9 @@
+node_modules/
+share/
+.env
+.webex-suite-oauth.env
+.webex-suite-oauth.json
+coverage/
+.nyc_output/
+.DS_Store
+*.swp
