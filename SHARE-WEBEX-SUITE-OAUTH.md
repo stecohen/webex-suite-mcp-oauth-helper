@@ -1,6 +1,9 @@
 # Share the Webex Suite OAuth Helper
 
-This repo now includes a helper for the official Webex Suite MCP server:
+This repo includes a helper for the official Webex Messaging and Meetings MCP servers. Each login or refresh updates both Codex entries with the same access token:
+
+- `Webex-messaging` at `https://mcp.webexapis.com/mcp/webex-messaging`
+- `Webex-meeting` at `https://mcp.webexapis.com/mcp/webex-meeting`
 
 - `npm run oauth:webex-suite:login`
 - `npm run oauth:webex-suite:refresh`
@@ -31,7 +34,7 @@ That command creates a sanitized `.tar.gz` archive in `share/` that:
 
 ## Scope checklist
 
-For the official Webex Suite MCP server at `https://mcp.webexapis.com/mcp/webex-suite`, the default helper expects this scope set:
+For the official Webex Messaging and Meetings MCP servers, the default helper expects this scope set:
 
 ```text
 spark:mcp meeting:schedules_read meeting:schedules_write meeting:participants_read meeting:summaries_read meeting:recordings_read meeting:transcripts_read spark:messages_write spark:messages_read spark:rooms_write spark:rooms_read spark:memberships_write spark:webhooks_write Identity:Organization Identity:Config

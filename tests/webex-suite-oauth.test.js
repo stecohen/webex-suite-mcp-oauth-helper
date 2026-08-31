@@ -6,6 +6,7 @@ import {
   getWebexSuiteOAuthSettings,
   normalizeTokenResponse,
   upsertMcpServerSection,
+  upsertMcpServerSections,
 } from "../lib/webex-suite-oauth.js";
 
 describe("Webex Suite OAuth Helper", () => {
@@ -86,5 +87,24 @@ url = "https://jira.example.com/"
     assert.match(updated, /Bearer new-access-token/);
     assert.match(updated, /\[mcp_servers\.jira\]/);
     assert.doesNotMatch(updated, /old-token/);
+  });
+
+  it("upserts messaging and meeting servers with one access token", () => {
+    const updated = upsertMcpServerSections('model = "gpt-5.5"\n', [
+      {
+        serverName: "Webex-messaging",
+        serverUrl: "https://mcp.webexapis.com/mcp/webex-messaging",
+        accessToken: "shared-access-token",
+      },
+      {
+        serverName: "Webex-meeting",
+        serverUrl: "https://mcp.webexapis.com/mcp/webex-meeting",
+        accessToken: "shared-access-token",
+      },
+    ]);
+
+    assert.match(updated, /\[mcp_servers\.Webex-messaging\]/);
+    assert.match(updated, /\[mcp_servers\.Webex-meeting\]/);
+    assert.strictEqual((updated.match(/Bearer shared-access-token/g) || []).length, 2);
   });
 });

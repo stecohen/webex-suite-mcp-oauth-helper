@@ -3,6 +3,7 @@ share/
 .env
 .webex-suite-oauth.env
 .webex-suite-oauth.json
+.webex-mcp-remote-client.json
 coverage/
 .nyc_output/
 .DS_Store

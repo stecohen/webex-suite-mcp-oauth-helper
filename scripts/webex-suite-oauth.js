@@ -13,7 +13,7 @@ import {
   getWebexSuiteOAuthSettings,
   maskToken,
   normalizeTokenResponse,
-  upsertMcpServerSection,
+  upsertMcpServerSections,
   validateOAuthSettings,
 } from "../lib/webex-suite-oauth.js";
 
@@ -111,11 +111,10 @@ async function updateCodexConfig(settings, accessToken) {
   const original = await fs.readFile(settings.configPath, "utf8");
   await fs.writeFile(settings.backupPath, original, "utf8");
 
-  const updated = upsertMcpServerSection(original, {
-    serverName: settings.mcpServerName,
-    serverUrl: settings.mcpServerUrl,
-    accessToken,
-  });
+  const updated = upsertMcpServerSections(
+    original,
+    settings.mcpServers.map((server) => ({ ...server, accessToken }))
+  );
 
   await fs.writeFile(settings.configPath, updated, "utf8");
 }
@@ -188,8 +187,10 @@ function printStatus(settings, store) {
   console.log(`Token store: ${settings.tokenStorePath}`);
   console.log(`Codex config: ${settings.configPath}`);
   console.log(`Backup path: ${settings.backupPath}`);
-  console.log(`MCP server entry: ${settings.mcpServerName}`);
-  console.log(`MCP server URL: ${settings.mcpServerUrl}`);
+  console.log("MCP server entries:");
+  for (const server of settings.mcpServers) {
+    console.log(`- ${server.serverName}: ${server.serverUrl}`);
+  }
   console.log(`Redirect URI: ${settings.redirectUri}`);
   console.log(`Scopes: ${settings.scopes}`);
   console.log(`Client ID configured: ${settings.clientId ? "yes" : "no"}`);
@@ -239,7 +240,9 @@ async function runLogin() {
   console.log("OAuth login succeeded.");
   console.log(`Access token expires at: ${tokenData.accessTokenExpiresAt || "unknown"}`);
   console.log(`Refresh token expires at: ${tokenData.refreshTokenExpiresAt || "unknown"}`);
-  console.log(`Updated Codex config entry: ${settings.mcpServerName}`);
+  console.log(
+    `Updated Codex config entries: ${settings.mcpServers.map((server) => server.serverName).join(", ")}`
+  );
 }
 
 async function runRefresh() {
@@ -265,7 +268,9 @@ async function runRefresh() {
   console.log("OAuth refresh succeeded.");
   console.log(`Access token expires at: ${tokenData.accessTokenExpiresAt || "unknown"}`);
   console.log(`Refresh token expires at: ${tokenData.refreshTokenExpiresAt || "unknown"}`);
-  console.log(`Updated Codex config entry: ${settings.mcpServerName}`);
+  console.log(
+    `Updated Codex config entries: ${settings.mcpServers.map((server) => server.serverName).join(", ")}`
+  );
 }
 
 async function runStatus() {
